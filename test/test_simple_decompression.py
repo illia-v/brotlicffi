@@ -108,6 +108,19 @@ def test_high_expansion_prefix_without_output_buffer_limit():
     assert result == uncompressed
 
 
+@pytest.mark.parametrize('output_buffer_limit', [None, 50])
+def test_decompressobj_rejects_trailing_data(output_buffer_limit):
+    o = brotlicffi.Decompressor()
+    data = brotlicffi.compress(b'A' * 100) + b'tail'
+    if output_buffer_limit is not None:
+        assert o.decompress(data, output_buffer_limit=50) == b'A' * 50
+        assert not o.can_accept_more_data()
+        data = b''
+
+    with pytest.raises(brotlicffi.error, match='trailing data'):
+        o.decompress(data, output_buffer_limit=output_buffer_limit)
+
+
 def test_drip_feed(simple_compressed_file):
     """
     Sending in the data one byte at a time still works.

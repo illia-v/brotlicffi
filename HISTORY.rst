@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+- Fixed infinite loops in streaming consumers by rejecting trailing data
+  after a complete Brotli stream.
+
 1.2.0.2 (2026-08-21)
 --------------------
 
