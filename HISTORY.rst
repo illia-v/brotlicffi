@@ -4,8 +4,12 @@ Changelog
 Unreleased
 ----------
 
-- Fixed infinite loops in streaming consumers by rejecting trailing data
-  after a complete Brotli stream.
+- Changed one-shot ``decompress()`` and streaming ``Decompressor.process()`` /
+  ``Decompressor.decompress()`` to raise ``brotlicffi.error`` for trailing bytes
+  after a complete Brotli stream, including calls without an output limit.
+  Previously tolerated input is now rejected, and any output produced during
+  the failing call is discarded. This prevents infinite drain loops in
+  streaming consumers.
 
 1.2.0.2 (2026-08-21)
 --------------------
