@@ -494,6 +494,7 @@ class Decompressor(object):
 
             # Reject bytes remaining after the Brotli stream finishes.
             if rc == lib.BROTLI_DECODER_RESULT_SUCCESS and available_in[0]:
+                self._unconsumed_data = b''
                 raise error("Decompression error: trailing data after stream.")
 
             # Next, copy the result out.
